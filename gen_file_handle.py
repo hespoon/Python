@@ -8,12 +8,12 @@ fileDataList_g = []
 
 class GenFileHandler(xml.sax.ContentHandler):
     def __init__(self):
-        # 标签内容，注意清理空格
+        # 标签内容
         self.content = ""
 
     def startElement(self, tag, arrtibutes):
         """
-        开始处理标签，存储标签名称
+        标签开始处理时回调
 
         Args:
             tag: 标签名
@@ -23,18 +23,22 @@ class GenFileHandler(xml.sax.ContentHandler):
 
     def endElement(self, tag):
         """
-        结束处理标签
+        标签处理结束时回调
 
         Args:
             tag: 标签名
         """
         if tag == "TSeq_accver":
+            # 基因序列名称
             if not self.content.isspace():
                 genFilePath = "target/gen_file/" + self.content + ".seq"
                 fileNameList_g.append(genFilePath)
         elif tag == "TSeq_sequence":
+            # 基因序列内容
             if not self.content.isspace():
                 fileDataList_g.append(self.content)
+
+        # 标签处理结束，清理标签内容
         self.content = ""
 
     def characters(self, content):
